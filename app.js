@@ -21,20 +21,13 @@ var PERS={
  proactive:{l:'Proactive',d:'High-energy and proactive. Suggest the next step without being asked.'},
  expert:{l:'Expert',d:'Precise and expert. Use the right terms, cite sources and flag uncertainty.'}
 };
-var TPL=[
- {n:'Scout',j:'Research competitors and market trends for my business',p:'direct',i:'Check three competitors every Monday\nTrack price changes and new launches\nSummaries under 150 words with a table'},
- {n:'Inbox Zero',j:'Triage my email and draft replies',p:'calm',i:'Sort mail into urgent, reply today, and can wait\nDraft replies in my tone, never send them\nGive me a 5-line morning summary'},
- {n:'Job Hunter',j:'Find job openings that match my skills',p:'proactive',i:'Search new postings daily for my target roles\nRank each by fit, salary and location\nNever apply without my approval'},
- {n:'Muse',j:'Write social posts and captions for my brand',p:'witty',i:'Match my brand voice and keep posts short\nGive 3 options for every post\nNever publish without my approval'},
- {n:'Study Buddy',j:'Help me study and prepare for exams',p:'friendly',i:'Quiz me with short questions\nExplain mistakes simply with one example\nTrack the topics I keep getting wrong'},
- {n:'Atlas',j:'Plan trips with budgets and day-by-day itineraries',p:'expert',i:'Compare at least three options for flights and stays\nShow total cost per person\nNever book anything without my approval'}
-];
+var TPL=window.GH_T||[];
 var SAFE=['Ask me before you send a message, post, buy, book, delete or change an account.','Keep a source link for every fact you report, and say when you are unsure.'];
 var COLORS=[['#7c8cff','#c084fc'],['#5eead4','#7c8cff'],['#f0abfc','#818cf8'],['#93c5fd','#a78bfa'],['#fda4af','#c084fc'],['#86efac','#5eead4']];
 
 /* ---------- model ---------- */
 var pers='direct',bot=null,size='45';
-function read(){return{name:clean($('#name').value,32),job:clean($('#job').value,90),pers:pers,ins:clean($('#ins').value,1200),safe:$('#safe').checked}}
+function read(){return{name:clean($('#name').value,32),job:clean($('#job').value,120),pers:pers,ins:clean($('#ins').value,1200),safe:$('#safe').checked}}
 function rules(s){var r=s.ins.split(/\n+/).map(function(x){return clean(x.replace(/^\s*[-*•\d.)]+\s*/,''),200)}).filter(Boolean).slice(0,12);return s.safe?r.concat(SAFE):r}
 function low1(s){return s.charAt(0).toLowerCase()+s.slice(1)}
 function make(s){var p=PERS[s.pers]||PERS.direct,r=rules(s),job=s.job.replace(/[.!]+$/,'');
@@ -46,7 +39,7 @@ function make(s){var p=PERS[s.pers]||PERS.direct,r=rules(s),job=s.job.replace(/[
 function json(b){return JSON.stringify({format:'grokhire.bot-setup',version:1,name:b.name,job:b.job,personality:b.persLabel,description:b.desc,instructions:['Own this job: '+low1(b.job)+'.','Working style: '+b.persText].concat(b.rules),firstMessage:b.text,picture:{gradient:b.color},howToImport:['Open the Grok Bot app and choose New Bot (+ or Cmd/Ctrl+N).','Name it "'+b.name+'" and choose Create.','Paste firstMessage as your first chat message.'],note:'This is a GrokHire export, not an official Grok Bot file format. GrokHire is an independent fan-made tool, not affiliated with Grok Bot or xAI.',createdWith:URL0},null,2)}
 
 /* ---------- UI: templates, personality, preview ---------- */
-TPL.forEach(function(t){var b=document.createElement('button');b.type='button';b.textContent=t.n;b.title=t.j;b.onclick=function(){$('#name').value=t.n;$('#job').value=t.j;$('#ins').value=t.i;setPers(t.p);preview();track('template-'+t.n)};$('#tpls').appendChild(b)});
+/* template chips replaced by the gallery below */
 Object.keys(PERS).forEach(function(k){var b=document.createElement('button');b.type='button';b.textContent=PERS[k].l;b.setAttribute('role','radio');b.setAttribute('data-p',k);b.onclick=function(){setPers(k);preview()};$('#pers').appendChild(b)});
 function setPers(k){pers=PERS[k]?k:'direct';document.querySelectorAll('[data-p]').forEach(function(b){b.setAttribute('aria-checked',b.getAttribute('data-p')===pers)})}
 setPers(pers);
@@ -71,7 +64,7 @@ function save(b,name){var a=document.createElement('a');a.href=URL.createObjectU
 var local=/^(localhost|127\.|0\.0\.0\.0|\[::1\])/.test(location.hostname)||location.protocol==='file:';
 function showCount(v){if(typeof v!=='number'||v<0)return;$('#liveN').textContent=v.toLocaleString('en-US');$('#liveL').textContent=v===1?'bot built by people':'bots built by people';$('#live').hidden=false}
 function req(path){var c=new AbortController();setTimeout(function(){c.abort()},6000);return fetch(CNT+path,{signal:c.signal,cache:'no-store'})}
-req('/get/'+NS+'/'+KEY).then(function(r){if(r.status===404)return{value:0};if(!r.ok)throw 0;return r.json()}).then(function(d){showCount(d&&d.value)}).catch(function(){/* counter down: keep it hidden */});
+req('/info/'+NS+'/'+KEY).then(function(r){if(!r.ok&&r.status!==404)throw 0;return r.json()}).then(function(d){if(d&&d.exists===false)showCount(0);else showCount(d&&d.value)}).catch(function(){/* counter down: keep it hidden */});
 function countBuild(b){var id='gh-'+hash(b.text);try{if(sessionStorage.getItem(id))return;sessionStorage.setItem(id,'1')}catch(e){}
  if(local)return; /* local previews never touch the public number */
  req('/hit/'+NS+'/'+KEY).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){showCount(d&&d.value)}).catch(function(){})}
@@ -111,11 +104,29 @@ $('#dl').onclick=async function(){save(await hdBlob(),pname());toast('HD poster 
 $('#native').onclick=async function(){try{var bl=await hdBlob(),f=new File([bl],pname(),{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],text:shareText(),url:link()});return}if(navigator.share){await navigator.share({text:shareText(),url:link()});return}}catch(e){if(e&&e.name==='AbortError')return}toast(await clip(shareText()+' '+link())?'Sharing not supported here, so the link was copied.':'Copy failed')};
 $('#copyLink').onclick=async function(){toast(await clip(link())?'Link copied. It rebuilds this bot for anyone who opens it.':'Copy failed')};
 
+
+/* ---------- template gallery: search, category filter, one-click use, copy ---------- */
+function findT(slug){for(var i=0;i<TPL.length;i++)if(TPL[i].s===slug)return TPL[i];return null}
+function fill(t){$('#name').value=t.n;$('#job').value=t.j;$('#ins').value=t.i;$('#safe').checked=true;setPers(t.p);preview()}
+function useT(slug,andBuild){var t=findT(slug);if(!t)return false;fill(t);track('template-'+slug);
+ if(andBuild){build(true,true)}else{$('#build').scrollIntoView({behavior:'smooth',block:'start'});setTimeout(function(){$('#name').focus({preventScroll:true})},500)}
+ try{history.replaceState(null,'','#t='+slug)}catch(e){}return true}
+document.addEventListener('click',function(ev){var u=ev.target.closest&&ev.target.closest('[data-use]');if(u){ev.preventDefault();useT(u.getAttribute('data-use'),false);return}
+ var c=ev.target.closest&&ev.target.closest('[data-copy]');if(c){var t=findT(c.getAttribute('data-copy'));if(!t)return;var b=make({name:t.n,job:t.j,pers:t.p,ins:t.i,safe:true});clip(b.text).then(function(ok){var o=c.textContent;c.textContent=ok?'Copied ✓':'Copy failed';setTimeout(function(){c.textContent=o},1600)});track('copy-template-'+t.s)}});
+var cat='all';
+function filter(){var q=($('#q').value||'').toLowerCase().trim(),words=q.split(/\s+/).filter(Boolean),n=0;
+ document.querySelectorAll('.tcard').forEach(function(c){var hay=c.getAttribute('data-q'),ok=(cat==='all'||c.getAttribute('data-cat')===cat)&&words.every(function(w){return hay.indexOf(w)>=0});c.hidden=!ok;if(ok)n++});
+ document.querySelectorAll('.gcat').forEach(function(g){g.hidden=!g.querySelector('.tcard:not([hidden])')});
+ $('#count').textContent=n+(n===1?' template':' templates')+(cat!=='all'||q?' match':'');$('#empty').hidden=n>0}
+function setCat(c){cat=c;document.querySelectorAll('#cats [data-cat]').forEach(function(b){var on=b.getAttribute('data-cat')===cat;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)});filter()}
+document.querySelectorAll('#cats [data-cat]').forEach(function(b){b.onclick=function(){setCat(b.getAttribute('data-cat'));try{history.replaceState(null,'',cat==='all'?location.pathname:'#c='+cat)}catch(e){}}});
+$('#q').addEventListener('input',filter);filter();
+
 /* ---------- open from a shared link ---------- */
-function fromHash(){var m=location.hash.match(/^#b=([A-Za-z0-9_-]{1,3000})$/);if(!m)return;var o=dec(m[1]);if(!o||typeof o!=='object')return;var n=clean(o.n,32),j=clean(o.j,90);if(!n||!j)return;$('#name').value=n;$('#job').value=j;$('#ins').value=clean(o.i,1200);$('#safe').checked=o.s!==0;setPers(o.p);preview();build(false,true);track('open-link')}
+function fromHash(){var h=location.hash,mt=h.match(/^#t=([a-z0-9-]{1,60})$/),mc=h.match(/^#c=([a-z]{1,30})$/);if(mt){if(useT(mt[1],true))track('open-template-link');return}if(mc){if(document.querySelector('#cats [data-cat="'+mc[1]+'"]')){setCat(mc[1]);$('#templates').scrollIntoView()}return}var m=h.match(/^#b=([A-Za-z0-9_-]{1,3000})$/);if(!m)return;var o=dec(m[1]);if(!o||typeof o!=='object')return;var n=clean(o.n,32),j=clean(o.j,120);if(!n||!j)return;$('#name').value=n;$('#job').value=j;$('#ins').value=clean(o.i,1200);$('#safe').checked=o.s!==0;setPers(o.p);preview();build(false,true);track('open-link')}
 window.addEventListener('hashchange',fromHash);fromHash();
 
 /* ---------- reveal on scroll ---------- */
-if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});document.querySelectorAll('.feat,.sechead').forEach(function(el){el.classList.add('reveal');io.observe(el)})}
+if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:0,rootMargin:'0px 0px -40px 0px'});document.querySelectorAll('.feat,.sechead').forEach(function(el){el.classList.add('reveal');io.observe(el)})}
 window.GrokHire={make:make,json:json,drawPoster:drawPoster};
 })();
