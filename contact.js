@@ -1,4 +1,4 @@
-/* Fun "Contact me" widget: email only */
+/* Fun "Contact me" widget: email + WhatsApp username (config: "contact" in tools/templates.json -> window.GH_CONTACT) */
 (function(){
 var s=document.currentScript,E='info@d3ddd.com',SUB=s.getAttribute('data-subject')||'Hello human!',LINE=s.getAttribute('data-line')||'A real human reads every email.',EMO=s.getAttribute('data-emoji')||'👋';
 var css='.ct-fab{position:fixed;right:16px;bottom:16px;z-index:60;display:flex;align-items:center;gap:8px;padding:10px 16px 10px 12px;border:0;border-radius:999px;background:linear-gradient(135deg,#ffffff,#dfe2ff);color:#07070b;font:600 14px/1.2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;box-shadow:0 0 0 1px #ffffff30,0 8px 30px #7c8cff55;cursor:pointer;animation:ct-wig 4s ease-in-out infinite;transition:transform .2s;max-width:calc(100vw - 32px)}'+
@@ -8,6 +8,7 @@ var css='.ct-fab{position:fixed;right:16px;bottom:16px;z-index:60;display:flex;a
 '.ct-ov{position:fixed;inset:0;z-index:100;background:#0008;display:flex;align-items:center;justify-content:center;padding:16px}.ct-ov[hidden]{display:none}'+
 '.ct-m{position:relative;background:#101017;color:#f4f4f7;border:1px solid #ffffff24;border-radius:20px;padding:24px 22px 20px;max-width:360px;width:100%;box-sizing:border-box;text-align:center;font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;animation:ct-pop .3s cubic-bezier(.3,1.6,.6,1)}'+
 '.ct-m h2{margin:4px 0 8px;font-size:20px}.ct-m p{margin:0 0 16px;color:#9a9aab}.ct-big{font-size:40px}.ct-x{position:absolute;top:8px;right:10px;border:0;background:none;font-size:22px;cursor:pointer;color:#9a9aab;padding:4px 8px}'+
+'.ct-wa{margin-top:10px;font-size:14px;color:#f4f4f7}.ct-wa a{color:#f4f4f7;text-decoration:none}.ct-wa b{color:#25d366}'+
 '.ct-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.ct-row a,.ct-row button{flex:1 1 130px;padding:11px 12px;border-radius:12px;font:600 14px sans-serif;cursor:pointer;text-decoration:none;border:1px solid #ffffff30}.ct-row a{background:#fff;color:#07070b}.ct-row button{background:#ffffff0a;color:#f4f4f7}.ct-addr{margin-top:12px;font-size:13px;color:#9a9aab;word-break:break-all}'+
 '@media (max-width:600px){.ct-fab .ct-t{display:none}.ct-fab{padding:12px;right:12px}}'+
 '@media (prefers-reduced-motion:reduce){.ct-fab,.ct-fab .ct-e,.ct-m{animation:none!important;transition:none!important}.ct-fab:hover,.ct-fab:focus-visible{transform:none}}';
@@ -15,8 +16,10 @@ var st=document.createElement('style');st.textContent=css;document.head.appendCh
 var b=document.createElement('button');b.className='ct-fab';b.type='button';b.setAttribute('aria-haspopup','dialog');b.setAttribute('aria-label','Contact the human behind GrokHire');
 b.innerHTML='<span class="ct-e" aria-hidden="true">'+EMO+'</span><span class="ct-t">Talk to a human</span>';
 var href='mailto:'+E+'?subject='+encodeURIComponent(SUB);
+var C=window.GH_CONTACT||{},WU=(C.wa||'').replace(/[^\w.]/g,''),WN=(C.waNum||'').replace(/\D/g,''),WT='<b aria-hidden="true">💬</b> WhatsApp: @'+WU;
+var WA=WU?'<div class="ct-wa">'+(WN?'<a href="https://wa.me/'+WN+'" target="_blank" rel="noopener">'+WT+'</a>':WT)+'</div>':'';
 var ov=document.createElement('div');ov.className='ct-ov';ov.hidden=true;
-ov.innerHTML='<div class="ct-m" role="dialog" aria-modal="true" aria-labelledby="ct-h"><button class="ct-x" type="button" aria-label="Close">×</button><div class="ct-big" aria-hidden="true">'+EMO+'</div><h2 id="ct-h">Psst… a real human!</h2><p></p><div class="ct-row"><a class="ct-mail" href="'+href+'">✉️ Email me</a><button type="button" class="ct-copy">📋 Copy email</button></div><div class="ct-addr">'+E+'</div><div class="ct-live" aria-live="polite" style="position:absolute;left:-9999px"></div></div>';
+ov.innerHTML='<div class="ct-m" role="dialog" aria-modal="true" aria-labelledby="ct-h"><button class="ct-x" type="button" aria-label="Close">×</button><div class="ct-big" aria-hidden="true">'+EMO+'</div><h2 id="ct-h">Psst… a real human!</h2><p></p><div class="ct-row"><a class="ct-mail" href="'+href+'">✉️ Email me</a><button type="button" class="ct-copy">📋 Copy email</button></div><div class="ct-addr">'+E+'</div>'+WA+'<div class="ct-live" aria-live="polite" style="position:absolute;left:-9999px"></div></div>';
 ov.querySelector('p').textContent=LINE;
 function count(){try{if(window.goatcounter&&window.goatcounter.count)window.goatcounter.count({path:'contact-click',title:'Contact click',event:true})}catch(e){}}
 function open(){count();ov.hidden=false;ov.querySelector('.ct-mail').focus()}
