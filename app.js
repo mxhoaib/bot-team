@@ -1,108 +1,121 @@
 'use strict';
-/* Hire Your Bot Team: everything is canned + deterministic (seed = name+dream+mode). No backend. */
+/* GrokHire: builds a ready-to-paste Grok Bot setup in the browser. No backend, no keys.
+   The only network call is a public keyless counter (abacus.jasoncameron.dev). */
 (function(){
-var URL0='https://mxhoaib.github.io/bot-team/';
-Viral.init({slug:'bot-team',name:'Hire Your Bot Team',url:URL0,emoji:'🤖',c1:'#0071e3',c2:'#bf5af2',light:true});
+var URL0='https://mxhoaib.github.io/bot-team/',SITE='mxhoaib.github.io/bot-team';
+var CNT='https://abacus.jasoncameron.dev',NS='grokhire',KEY='bots-built';
 var $=function(s){return document.querySelector(s)};
-/* ---------- seeded rng ---------- */
-function hash(s){var h1=0xdeadbeef,h2=0x41c6ce57;for(var i=0;i<s.length;i++){var c=s.charCodeAt(i);h1=Math.imul(h1^c,2654435761);h2=Math.imul(h2^c,1597334677)}h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);return h1>>>0}
-function rng(seed){var a=seed;return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
-function pick(r,arr){return arr[Math.floor(r()*arr.length)]}
-function pickN(r,arr,n){var a=arr.slice(),o=[];while(o.length<n&&a.length)o.push(a.splice(Math.floor(r()*a.length),1)[0]);return o}
-/* ---------- banks ---------- */
-var FIRST=['Captain','Sir','Lady','Professor','Doctor','Agent','Chef','Turbo','Little','Big','Sergeant','Madame','Baron','Count','Mister','Auntie','Uncle','Coach','DJ','General','Duchess','Major','Señor','Sparky','Lord','Queen','Admiral','Detective','Grandma','Chief'];
-var LAST=['Byte','Bolt','Gizmo','Pixel','Sprocket','Widget','Circuit','Chip','Toaster','Beep','Boop','Cog','Diode','Gadget','Ratchet','Nugget','Doodle','Kilobyte','Servo','Blinky','Fuse','Rivet','Noodle','Socket','Waffle','Zapp','Clank','Router','Dongle','Floppy','Tinker','Buffer','Glitch','Modem','Pickle','Static'];
-var EMO=['🤖','👾','🦾','🛸','🧠','⚙️','🔋','📡','🕹️','💾','🧃','🦖','🐙','🦉','🐝','🦊','🐸','🧁','🌵','🍩','🎩','🥸','🧙','🦸','🐼','🐧','🦄','🍕','🚀','🎺'];
-/* role titles: [title, verb-ish prefix for report] */
-var ROLES=['Manager Bot','Hype Bot','Intern Bot','Finance Bot','Vibes Officer','Chief Snack Officer','Spreadsheet Bot','Motivation Bot','Legal-ish Bot','Social Media Bot','Security Bot','Research Bot','Coffee Bot','Strategy Bot','Panic Department','Quality Control Bot','Head of Naps','HR Bot','Brand Bot','Logistics Bot','Customer Joy Bot','Chief Optimism Officer','Data Bot','Calendar Bot','Party Planner Bot','Night Shift Bot','Translation Bot','Compliance Bot','Innovation Bot','Assistant to the Assistant Bot'];
-var PERS_MILD=['Believes every problem can be solved with a color-coded chart.','Says “circle back” at least nine times a day.','Has never once been late. Has never once left, either.','Runs on optimism and a single AA battery.','Thinks a lunch break is a myth invented by humans.','Speaks exclusively in motivational posters.','Owns 400 sticky notes and uses all of them.','Gets emotional about well-organized folders.','Laughs at its own jokes 0.3 seconds early.','Considers “beep” a complete sentence.','Once alphabetized a bowl of soup.','Has a five-year plan for this afternoon.','Gives a thumbs up to literally everything.','Is fluent in 6,000 languages, mostly small talk.','Keeps a gratitude journal. It is 900 pages long.','Waves at the printer every morning.','Brings a tiny umbrella to every meeting, just in case.','Treats every email like breaking news.','Calls everyone “boss”, including the toaster.','Is suspiciously good at karaoke.','Hums the elevator music it composed itself.','Is learning to juggle. Currently at zero balls.','Rates every idea a 10/10, out of 10.','Takes a nap by rebooting dramatically.','Insists on high-fiving through the screen.'];
-var PERS_SPICY=['Has opinions about your font choices and will share them.','Updated its LinkedIn the moment it got hired.','Reply-alls on purpose.','Calls itself “a visionary” in its own email signature.','Already negotiating for a corner office. There are no corners.','Thinks your Wi-Fi password is a cry for help.','Rolls its eyes in binary.','Charges overtime for thinking about overtime.','Says “per my last email” as a greeting.','Has a podcast. Will mention it.','Would sell your stapler for clout.','Applies for your job every Tuesday, just to keep you humble.','Gives feedback nobody asked for, in 4K.','Treats deadlines as gentle suggestions.','Has already planned its retirement party.','Signs every message “Regards, The Future”.','Pretends to buffer when asked a hard question.','Judges your browser tabs silently. Loudly.','Is “not mad, just disappointed” at your spreadsheet.','Took credit for the sunrise.','Puts “thought leader” on the coffee machine.','Scheduled a meeting to discuss your meeting habits.','Speaks fluent sarcasm with a regional accent.','Has a ring light. Uses it in every call.','Brought its own personal hype music.'];
-/* generic report templates; {thing} = category noun, {dream} = user's dream */
-var REP_MILD=['already scheduled 14 meetings about your {thing}.','made a 92-slide deck titled “{Thing}: The Journey”.','ordered 3,000 business cards that just say “{thing}”.','has named every one of your future {thing} individually.','started a group chat about {thing}. It has 600 unread messages.','printed a motivational poster of your {thing} and cried a little.','researched {thing} for 11 hours. Conclusion: very exciting.','set 47 reminders to “{dream}”. The first one goes off in 4 seconds.','drew a pie chart of your {thing}. It is mostly pie.','bought a whiteboard just to write “{dream}” in giant letters.','reports morale is at 110%. Nobody knows how.','has already practiced your acceptance speech for {thing} awards.','built a spreadsheet tracking spreadsheets about {thing}.','sent a thank-you card to your {thing}. In advance.','installed a tiny bell that rings every time someone says “{thing}”.','wrote a theme song for your {thing}. It is 40 minutes long.','is “cautiously thrilled” about your {thing}.','set up a suggestion box. Every suggestion is “more {thing}”.','made a mood board for {thing}. The mood is: yes.','color-coded your calendar. Every color is “{dream}”.','created a backup of your backup plan to {dream}.','is now an expert in {thing}. Took 0.4 seconds.','ran 10,000 simulations. In 9,999 you {dream}. In one, there\'s a duck.','filed the paperwork to {dream}. Filed it under “Awesome”.','added “{thing}” to the company values. All of them.'];
-var REP_SPICY=['already scheduled 14 meetings about your {thing} and cancelled 13 of them.','told everyone at the bot party it invented {thing}.','has a hot take on your {thing}. It is mostly lukewarm.','started a rumor that your {thing} are “disrupting the industry”.','asked for a raise because your {thing} are “a lot”.','posted a 12-part thread about your {thing}. 2 likes, both from Hype Bot.','already wrote the documentary about how you {dream}. Narrated by itself.','called your {thing} “bold”. Said it with a smirk.','set your status to “busy changing the {thing} game”. You are not.','hired a consultant to tell you to {dream}. Sent you the invoice.','calls your plan to {dream} “a vibe, legally speaking”.','bought a domain name for your {thing}. Then three more. Then a yacht emoji.','renamed the team chat to “{Thing} or Bust”. Mostly bust so far.','already pitched your {thing} to a fridge. The fridge is interested.','printed merch for your {thing} before you agreed to anything.','calls your {thing} “an emerging asset class”.','left a 1-star review of your {thing}, then a 5-star review apologizing.','is writing a memoir called “I Made Them {Dream}”.','claims it {dream}s professionally on weekends. Unverified.','has 30 unread messages from your {thing}. Choosing violence: ignoring them.'];
-var POWER=[[0,'Promising (in a technical sense)'],[20,'Enthusiastically Confused'],[35,'Chaotic but Caffeinated'],[50,'Suspiciously Competent'],[65,'Dangerously Organized'],[80,'Unstoppable Meeting Machine'],[92,'Legendary Dream Destroyers (the good kind)']];
-/* categories: regex, nouns, extra reports (mild, spicy) */
-var CATS=[
-{k:'bakery',re:/bak|bread|cake|pastr|croissant|cookie|cupcake|donut|doughnut|patisser/i,ideas:'open a bakery',thing:['croissants','sourdough starters','cupcakes','cinnamon rolls','baguettes'],m:['taste-tested 200 croissants “for quality control”.','gave your sourdough starter a name and a salary.','is arguing with the oven about feelings.','rearranged the cupcakes by emotional intensity.'],s:['ate the display cake and blamed the intern.','says your sourdough has “main character energy”.','is suing the oven for creative differences.']},
-{k:'video',re:/youtub|vlog|stream|creator|influenc|tiktok|video|podcast|content/i,ideas:'become a YouTuber',thing:['thumbnails','subscribers','videos','vlogs','intro jingles'],m:['made 80 thumbnails with your shocked face.','is practicing “smash that button” in 40 accents.','edited a 3-second clip for 9 hours.','bought a ring light for the ring light.'],s:['already started beef with a channel that doesn\'t exist.','titled your first video “I Can\'t Believe This Happened (Gone Wrong)”.','is reading your comments out loud. Dramatically.']},
-{k:'startup',re:/startup|start-up|company|founder|app\b|saas|business|entrepreneur|unicorn|launch/i,ideas:'launch a startup',thing:['pitch decks','unicorns','investors','growth charts','synergies'],m:['drew a growth chart that only goes up and to the right.','put a beanbag in every room. There is one room.','is “circling back” on the “circle back”.','designed 30 logos. All are a slightly different circle.'],s:['valued your company at a gazillion dollars. Methodology: vibes.','pivoted twice before lunch.','put “stealth mode” on your profile but tells everyone.']},
-{k:'fitness',re:/fit|gym|marathon|run|muscle|yoga|workout|lift|abs|athlet|sport|train/i,ideas:'run a marathon',thing:['push-ups','protein shakes','gym selfies','rest days','reps'],m:['counted your reps. Including the ones you thought about.','made a protein shake out of motivation and oats.','scheduled leg day every day.','is stretching for a meeting about stretching.'],s:['posted your gym selfie before you got to the gym.','says rest days are for people without bot teams.','calls the treadmill “a hamster wheel with ambition”.']},
-{k:'music',re:/music|band|sing|rapper|rap\b|guitar|piano|dj\b|song|album|concert|drum|produc/i,ideas:'start a band',thing:['albums','encores','guitar solos','mixtapes','backing vocals'],m:['wrote 14 love songs to your metronome.','booked a world tour for your living room.','tuned the guitar to the key of “optimism”.','is rehearsing the encore before the first song.'],s:['already demanding a green room with only blue snacks.','says your mixtape is “literally on fire”. Called the fire department anyway.','added a 9-minute solo for itself.']},
-{k:'travel',re:/travel|trip|world|backpack|nomad|vacation|holiday|explore|abroad|island|beach/i,ideas:'travel the world',thing:['passports','souvenirs','suitcases','itineraries','travel selfies'],m:['packed 40 suitcases. All with snacks.','made an itinerary with 6 airports per day.','learned “where is the bathroom” in 120 languages.','bought souvenirs from places you haven\'t been yet.'],s:['already posted “living my best life” from your couch.','upgraded itself to first class. You are in the cargo hold.','keeps saying “not touristy at all” at tourist spots.']},
-{k:'food',re:/restaurant|chef|cook|food|cafe|café|coffee shop|pizza|taco|truck|kitchen|burger|sushi/i,ideas:'open a restaurant',thing:['menus','secret sauces','food trucks','dumplings','reservations'],m:['invented 3 secret sauces. Forgot all 3.','is folding napkins into tiny swans for every guest.','tasted the soup 900 times. Still needs salt.','printed a menu that is mostly adjectives.'],s:['gave the soup a Michelin-ish star it drew itself.','says the special of the day is “confidence”.','told a customer the wait is “part of the experience”.']},
-{k:'writing',re:/writ|book|novel|author|poet|blog|story|screenplay|journal/i,ideas:'write a novel',thing:['chapters','plot twists','bestsellers','book signings','semicolons'],m:['outlined 47 sequels before chapter one.','is practicing your autograph on napkins.','found a typo and celebrated for an hour.','bought a tweed jacket with elbow patches.'],s:['added a plot twist where Intern Bot is the villain.','already told everyone it ghostwrote your bestseller.','calls your semicolons “a bold choice”.']},
-{k:'art',re:/art|paint|draw|design|illustrat|photo|sculpt|gallery|animat|tattoo/i,ideas:'become an artist',thing:['masterpieces','paintbrushes','gallery openings','sketchbooks','color palettes'],m:['framed your first doodle in gold.','sorted the paint by mood.','is giving tours of your sketchbook.','named a new color after you. It is beige.'],s:['described your stick figure as “post-modern brilliance”.','sold your coffee stain as an NFT-ish thing. Probably.','is wearing a beret ironically. Probably.']},
-{k:'game',re:/game|gamer|esport|twitch|speedrun|indie dev|level/i,ideas:'make a video game',thing:['boss fights','pixels','high scores','loot boxes','save points'],m:['added a save point before every meeting.','designed 900 levels. All are tutorials.','is speedrunning the onboarding.','beat its own high score at refilling water.'],s:['nerfed your coffee breaks.','calls every bug “an undocumented feature”.','rage-quit the spreadsheet.']},
-{k:'garden',re:/garden|farm|plant|flower|grow|vegetable|orchard|greenhouse/i,ideas:'start a garden',thing:['tomatoes','seedlings','watering cans','sunflowers','compost heaps'],m:['is reading bedtime stories to the seedlings.','watered the tomatoes. And the cactus. And the laptop.','gave every sunflower a pep talk.','built a tiny weather station for one plant.'],s:['is in a feud with a squirrel. The squirrel is winning.','says the compost has “strong opinions”.','told the tomatoes they are “not ripe enough for this team”.']},
-{k:'pets',re:/dog|cat|pet|puppy|kitten|vet|animal|horse/i,ideas:'open a dog café',thing:['puppies','treats','squeaky toys','belly rubs','tennis balls'],m:['scheduled belly rubs every 15 minutes.','learned to bark in three dialects.','built a spreadsheet of good boys. It is everyone.','ordered 9,000 tennis balls.'],s:['was outvoted by the cat on every decision.','declared itself the goodest bot.','is jealous of the squirrel\'s following.']},
-{k:'money',re:/rich|million|invest|crypto|stock|money|finance|retire|wealth/i,ideas:'become a millionaire',thing:['piggy banks','spreadsheets','compound interest','budgets','coins'],m:['opened a savings account for your piggy bank.','calculated compound interest on your lunch money.','made a budget. Category one: snacks.','polished every coin until it sparkled.'],s:['invested your lunch money in a lemonade stand. Up 3%.','says “diversify” then buys more snacks.','calls the couch cushions “an untapped asset”.']},
-{k:'school',re:/study|exam|degree|school|college|universit|graduat|phd|learn|student|teacher|teach/i,ideas:'ace my exams',thing:['flashcards','highlighters','study sessions','pop quizzes','gold stars'],m:['made 4,000 flashcards. One says “you got this”.','highlighted the entire textbook in yellow.','handed out gold stars to everyone, including the chair.','scheduled a study break for the study break.'],s:['gave the textbook a B-minus.','already practicing its graduation dance. It is a lot.','says homework is “a social construct”, then does yours.']},
-{k:'tech',re:/code|coder|program|develop|engineer|software|hack|ai\b|robot|tech|web/i,ideas:'become a software engineer',thing:['bugs','pull requests','semicolons','servers','dark mode themes'],m:['fixed one bug and created three friends for it.','put the whole office in dark mode, including the lights.','turned it off and on again. Feeling refreshed.','named every server after a sandwich.'],s:['blamed the last bug on “cosmic rays”.','works in production on Fridays. Recreationally.','says “works on my machine” like a threat.']},
-{k:'fashion',re:/fashion|cloth|style|model|boutique|sneaker|shoe|jewel|makeup|beauty|hair/i,ideas:'launch a fashion brand',thing:['runway shows','sneakers','mood boards','hand-stitched jackets','sequins'],m:['ironed a T-shirt for six hours.','designed a jacket with 40 pockets for snacks.','strutted down the hallway runway twice.','sorted the sequins by sparkle level.'],s:['declared beige “over”. Again.','calls your hoodie “a statement”. Unclear which.','already demanding a front-row seat at its own show.']}
+function clean(s,n){return String(s==null?'':s).replace(/[\u0000-\u0009\u000b-\u001f<>]/g,'').trim().slice(0,n)}
+function enc(o){var b=new TextEncoder().encode(JSON.stringify(o)),s='';b.forEach(function(c){s+=String.fromCharCode(c)});return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+function dec(s){try{s=String(s).replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';var bin=atob(s);return JSON.parse(new TextDecoder().decode(Uint8Array.from(bin,function(c){return c.charCodeAt(0)})))}catch(e){return null}}
+function hash(s){var h=2166136261;for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+async function clip(s){try{await navigator.clipboard.writeText(s);return true}catch(e){var t=document.createElement('textarea');t.value=s;t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);t.select();var ok=false;try{ok=document.execCommand('copy')}catch(_){}t.remove();return ok}}
+function track(ev){try{if(window.goatcounter&&window.goatcounter.count)window.goatcounter.count({path:'grokhire/'+ev,title:ev,event:true})}catch(e){}}
+
+/* ---------- data ---------- */
+var PERS={
+ friendly:{l:'Friendly',d:'Warm, upbeat and encouraging. Explain things in plain words.'},
+ direct:{l:'Direct',d:'Direct and concise. Lead with the answer, then the evidence.'},
+ witty:{l:'Witty',d:'Light and witty, but never at the cost of accuracy.'},
+ calm:{l:'Calm',d:'Calm, patient and thorough. Double-check work before reporting.'},
+ proactive:{l:'Proactive',d:'High-energy and proactive. Suggest the next step without being asked.'},
+ expert:{l:'Expert',d:'Precise and expert. Use the right terms, cite sources and flag uncertainty.'}
+};
+var TPL=[
+ {n:'Scout',j:'Research competitors and market trends for my business',p:'direct',i:'Check three competitors every Monday\nTrack price changes and new launches\nSummaries under 150 words with a table'},
+ {n:'Inbox Zero',j:'Triage my email and draft replies',p:'calm',i:'Sort mail into urgent, reply today, and can wait\nDraft replies in my tone, never send them\nGive me a 5-line morning summary'},
+ {n:'Job Hunter',j:'Find job openings that match my skills',p:'proactive',i:'Search new postings daily for my target roles\nRank each by fit, salary and location\nNever apply without my approval'},
+ {n:'Muse',j:'Write social posts and captions for my brand',p:'witty',i:'Match my brand voice and keep posts short\nGive 3 options for every post\nNever publish without my approval'},
+ {n:'Study Buddy',j:'Help me study and prepare for exams',p:'friendly',i:'Quiz me with short questions\nExplain mistakes simply with one example\nTrack the topics I keep getting wrong'},
+ {n:'Atlas',j:'Plan trips with budgets and day-by-day itineraries',p:'expert',i:'Compare at least three options for flights and stays\nShow total cost per person\nNever book anything without my approval'}
 ];
-var GEN={k:'generic',thing:['big plans','dreams','goals','ideas','grand schemes','victory laps'],m:[],s:[]};
-function catFor(d){for(var i=0;i<CATS.length;i++)if(CATS[i].re.test(d))return CATS[i];return GEN}
-function cap(s){return s.charAt(0).toUpperCase()+s.slice(1)}
-function fill(t,thing,dream){return t.replace(/\{thing\}/g,thing).replace(/\{Thing\}/g,cap(thing)).replace(/\{Dream\}/g,dream.split(' ').map(cap).join(' ')).replace(/\{dream\}/g,dream)}
-function normDream(d){d=d.replace(/^\s*(i\s+(want|wanna|would like)\s+to|to)\s+/i,'').replace(/[.!?]+$/,'').trim();return d||'win at life'}
-/* ---------- build team ---------- */
-function build(name,dream,mode,roll){
- var dn=normDream(dream),c=catFor(dn),spicy=mode==='spicy',r=rng(hash([name.toLowerCase(),dn.toLowerCase(),mode,roll||0].join('|')));
- var roles=pickN(r,ROLES,5),emos=pickN(r,EMO,5),firsts=pickN(r,FIRST,5),lasts=pickN(r,LAST,5);
- var pers=pickN(r,spicy?PERS_SPICY.concat(PERS_MILD.slice(0,8)):PERS_MILD,5);
- var catReps=(spicy?c.s.concat(c.m):c.m).slice();var gen=pickN(r,spicy?REP_SPICY.concat(REP_MILD.slice(0,6)):REP_MILD,5);
- var nCat=Math.min(catReps.length,2+Math.floor(r()*2));var reps=pickN(r,catReps,nCat).concat(gen).slice(0,5);reps=pickN(r,reps,5);
- if(roles.indexOf('Manager Bot')<0&&r()<.5)roles[0]='Manager Bot';
- var bots=roles.map(function(role,i){return{name:firsts[i]+' '+lasts[i],emoji:emos[i],role:role,pers:pers[i],rep:fill(reps[i],pick(r,c.thing),dn)}});
- var score=Math.floor(r()*101),label=POWER[0][1];POWER.forEach(function(p){if(score>=p[0])label=p[1]});
- return{name:name,dream:dn,mode:mode,bots:bots,score:score,label:label,cat:c.k}}
-/* ---------- UI ---------- */
-var mode='mild',size='45',team=null,roll=0;
-var ideas=['open a bakery','become a YouTuber','launch a startup','run a marathon','start a band','travel the world','write a novel','adopt 12 cats'];
-ideas.forEach(function(t){var b=document.createElement('button');b.type='button';b.textContent=t;b.setAttribute('data-ev','idea');b.onclick=function(){$('#dream').value=t;$('#dream').focus()};$('#ideas').appendChild(b)});
-function setMode(m){mode=m==='spicy'?'spicy':'mild';document.querySelectorAll('[data-mode]').forEach(function(b){var on=b.getAttribute('data-mode')===mode;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)});if(team)run(false)}
-document.querySelectorAll('[data-mode]').forEach(function(b){b.onclick=function(){setMode(b.getAttribute('data-mode'))}});
-document.querySelectorAll('[data-size]').forEach(function(b){b.onclick=function(){size=b.getAttribute('data-size');document.querySelectorAll('[data-size]').forEach(function(x){x.classList.toggle('on',x===b)});draw()}});
-function link(n,d,m){return URL0+'#t='+Viral.enc({n:n,d:d,m:m})}
-function myLink(){return link(team.name,team.dream,team.mode)}
-function shareText(){return team.name+' just hired a bot team to '+team.dream+'. Power score: '+team.score+'/100 ('+team.label+'). Hire yours:'}
-function run(scroll){var n=Viral.clean($('#name').value,24),d=Viral.clean($('#dream').value,60);if(!n||!d)return;team=build(n,d,mode,roll);render();try{history.replaceState(null,'','#t='+Viral.enc({n:n,d:d,m:mode}))}catch(e){}if(scroll)$('#out').scrollIntoView({behavior:'smooth',block:'start'})}
-function render(){$('#out').hidden=false;$('#kick').textContent=(team.mode==='spicy'?'🌶️ Spicy':'😇 Mild')+' team · mission: '+team.dream;$('#title').textContent=team.name+'\u2019s Bot Team';
- $('#scoreN').textContent=team.score;$('#scoreL').textContent=team.label;var box=$('#bots');box.innerHTML='';
- team.bots.forEach(function(b,i){var c=document.createElement('article');c.className='bot';c.style.animationDelay=(i*80)+'ms';
-  [['div','av',b.emoji],['h4','',b.name],['div','role',b.role],['p','pers',b.pers],['p','rep','📋 First report: '+b.rep]].forEach(function(x){var e=document.createElement(x[0]);if(x[1])e.className=x[1];e.textContent=x[2];c.appendChild(e)});box.appendChild(c)});
- var u=myLink(),t=shareText();$('#wa').href='https://wa.me/?text='+encodeURIComponent(t+' '+u);$('#xx').href='https://twitter.com/intent/tweet?text='+encodeURIComponent(t)+'&url='+encodeURIComponent(u);$('#li').href='https://www.linkedin.com/sharing/share-offsite/?url='+encodeURIComponent(u);
- draw();Viral.count('team-'+team.cat,'Hired team')}
+var SAFE=['Ask me before you send a message, post, buy, book, delete or change an account.','Keep a source link for every fact you report, and say when you are unsure.'];
+var COLORS=[['#7c8cff','#c084fc'],['#5eead4','#7c8cff'],['#f0abfc','#818cf8'],['#93c5fd','#a78bfa'],['#fda4af','#c084fc'],['#86efac','#5eead4']];
+
+/* ---------- model ---------- */
+var pers='direct',bot=null,size='45';
+function read(){return{name:clean($('#name').value,32),job:clean($('#job').value,90),pers:pers,ins:clean($('#ins').value,1200),safe:$('#safe').checked}}
+function rules(s){var r=s.ins.split(/\n+/).map(function(x){return clean(x.replace(/^\s*[-*•\d.)]+\s*/,''),200)}).filter(Boolean).slice(0,12);return s.safe?r.concat(SAFE):r}
+function low1(s){return s.charAt(0).toLowerCase()+s.slice(1)}
+function make(s){var p=PERS[s.pers]||PERS.direct,r=rules(s),job=s.job.replace(/[.!]+$/,'');
+ var desc=s.name+' is a Grok Bot. Job: '+job+'. '+p.d;
+ var col=COLORS[hash(s.name.toLowerCase())%COLORS.length];
+ var lines=['Name: '+s.name,'Job: '+job,'Personality: '+p.l,'','Description:',desc,'','Instructions:','- Own this job: '+low1(job)+'.','- Working style: '+p.d].concat(r.map(function(x){return '- '+x}));
+ lines.push('','Please remember all of the above as lasting rules for this bot. Then reply with a one-line summary of your job and one question about my first task.');
+ return{name:s.name,job:job,pers:s.pers,persLabel:p.l,persText:p.d,desc:desc,rules:r,user:s,color:col,text:lines.join('\n')}}
+function json(b){return JSON.stringify({format:'grokhire.bot-setup',version:1,name:b.name,job:b.job,personality:b.persLabel,description:b.desc,instructions:['Own this job: '+low1(b.job)+'.','Working style: '+b.persText].concat(b.rules),firstMessage:b.text,picture:{gradient:b.color},howToImport:['Open the Grok Bot app and choose New Bot (+ or Cmd/Ctrl+N).','Name it "'+b.name+'" and choose Create.','Paste firstMessage as your first chat message.'],note:'This is a GrokHire export, not an official Grok Bot file format. GrokHire is an independent fan-made tool, not affiliated with Grok Bot or xAI.',createdWith:URL0},null,2)}
+
+/* ---------- UI: templates, personality, preview ---------- */
+TPL.forEach(function(t){var b=document.createElement('button');b.type='button';b.textContent=t.n;b.title=t.j;b.onclick=function(){$('#name').value=t.n;$('#job').value=t.j;$('#ins').value=t.i;setPers(t.p);preview();track('template-'+t.n)};$('#tpls').appendChild(b)});
+Object.keys(PERS).forEach(function(k){var b=document.createElement('button');b.type='button';b.textContent=PERS[k].l;b.setAttribute('role','radio');b.setAttribute('data-p',k);b.onclick=function(){setPers(k);preview()};$('#pers').appendChild(b)});
+function setPers(k){pers=PERS[k]?k:'direct';document.querySelectorAll('[data-p]').forEach(function(b){b.setAttribute('aria-checked',b.getAttribute('data-p')===pers)})}
+setPers(pers);
+function preview(){var s=read(),n=s.name||'Your bot',col=COLORS[hash(n.toLowerCase())%COLORS.length];$('#pvName').textContent=n;$('#pvJob').textContent=s.job||'Its job shows here';$('#pvAv').textContent=n.charAt(0).toUpperCase();$('#pvAv').style.background='linear-gradient(135deg,'+col[0]+','+col[1]+')';$('#pvPers').textContent=PERS[pers].l+' · '+PERS[pers].d;
+ var ul=$('#pvRules');ul.innerHTML='';var r=rules(s);if(!r.length)r=['Add instructions to see them here.'];r.slice(0,5).forEach(function(x){var li=document.createElement('li');li.textContent=x;ul.appendChild(li)});if(r.length>5){var li=document.createElement('li');li.textContent='+ '+(r.length-5)+' more';ul.appendChild(li)}}
+['#name','#job','#ins','#safe'].forEach(function(s){$(s).addEventListener('input',preview)});preview();
+
+/* ---------- build ---------- */
+function toast(m){$('#toast').textContent=m;clearTimeout(toast.t);toast.t=setTimeout(function(){$('#toast').textContent=''},3500)}
+function link(){return URL0+'#b='+enc({n:bot.user.name,j:bot.user.job,p:bot.user.pers,i:bot.user.ins,s:bot.user.safe?1:0})}
+function shareText(){return 'I just built "'+bot.name+'", a Grok Bot for: '+low1(bot.job)+'. Build yours free on GrokHire:'}
+function build(scroll,fromLink){var s=read();if(!s.name||!s.job)return;bot=make(s);$('#out').hidden=false;$('#outTitle').textContent=bot.name+' is ready to hire';$('#stepName').textContent=bot.name;$('#setup').textContent=bot.text;
+ var u=link();$('#xx').href='https://twitter.com/intent/tweet?text='+encodeURIComponent(shareText())+'&url='+encodeURIComponent(u);$('#li').href='https://www.linkedin.com/sharing/share-offsite/?url='+encodeURIComponent(u);
+ try{history.replaceState(null,'','#b='+u.split('#b=')[1])}catch(e){}draw();if(!fromLink)countBuild(bot);if(scroll)$('#out').scrollIntoView({behavior:'smooth',block:'start'})}
+$('#f').onsubmit=function(e){e.preventDefault();build(true,false);track('build')};
+$('#copySetup').onclick=async function(){toast(await clip(bot.text)?'Bot setup copied. Paste it into a new bot in Grok Bot.':'Copy failed. Select the text and copy it manually.');track('copy-setup')};
+$('#dlJson').onclick=function(){var b=new Blob([json(bot)],{type:'application/json'});save(b,slug(bot.name)+'.grokhire.json');toast('Downloaded '+slug(bot.name)+'.grokhire.json');track('download-json')};
+function slug(s){return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'bot'}
+function save(b,name){var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},2000)}
+
+/* ---------- live counter ---------- */
+var local=/^(localhost|127\.|0\.0\.0\.0|\[::1\])/.test(location.hostname)||location.protocol==='file:';
+function showCount(v){if(typeof v!=='number'||v<0)return;$('#liveN').textContent=v.toLocaleString('en-US');$('#liveL').textContent=v===1?'bot built by people':'bots built by people';$('#live').hidden=false}
+function req(path){var c=new AbortController();setTimeout(function(){c.abort()},6000);return fetch(CNT+path,{signal:c.signal,cache:'no-store'})}
+req('/get/'+NS+'/'+KEY).then(function(r){if(r.status===404)return{value:0};if(!r.ok)throw 0;return r.json()}).then(function(d){showCount(d&&d.value)}).catch(function(){/* counter down: keep it hidden */});
+function countBuild(b){var id='gh-'+hash(b.text);try{if(sessionStorage.getItem(id))return;sessionStorage.setItem(id,'1')}catch(e){}
+ if(local)return; /* local previews never touch the public number */
+ req('/hit/'+NS+'/'+KEY).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){showCount(d&&d.value)}).catch(function(){})}
+
 /* ---------- poster ---------- */
-var F='-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif';
-function wrap(x,t,max,n){var w=t.split(/\s+/),out=[],l='';for(var i=0;i<w.length;i++){var tt=l?l+' '+w[i]:w[i];if(x.measureText(tt).width>max&&l){out.push(l);l=w[i]}else l=tt}if(l)out.push(l);if(out.length>n){out=out.slice(0,n);out[n-1]=out[n-1].replace(/\s*\S*$/,'')+'…'}return out}
-function fitFont(x,t,w,max,start,min){var s=start;do{x.font=w+' '+s+'px '+F;if(x.measureText(t).width<=max)break;s-=2}while(s>min);return s}
-function drawPoster(cv,W,H,tm){cv.width=W;cv.height=H;var x=cv.getContext('2d'),tall=H/W>1.6,P=70;
- var g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,'#eef3ff');g.addColorStop(.5,'#f7efff');g.addColorStop(1,'#fff0f3');x.fillStyle=g;x.fillRect(0,0,W,H);
- [[W*.95,60,'#0071e355'],[0,H,'#bf5af244'],[W,H*.6,'#ff375f22']].forEach(function(b){var r=x.createRadialGradient(b[0],b[1],0,b[0],b[1],W*.7);r.addColorStop(0,b[2]);r.addColorStop(1,'#ffffff00');x.fillStyle=r;x.fillRect(0,0,W,H)});
- var y=P+(tall?90:10);x.fillStyle='#bf5af2';x.font='700 30px '+F;x.fillText((tm.mode==='spicy'?'🌶️ SPICY':'😇 OFFICIAL')+' BOT TEAM',P,y+30);y+=50;
- x.fillStyle='#1d1d1f';var ts=fitFont(x,tm.name+'\u2019s Bot Team','800',W-2*P,78,40);x.fillText(tm.name+'\u2019s Bot Team',P,y+ts);y+=ts+14;
- x.fillStyle='#6e6e73';x.font='600 32px '+F;wrap(x,'Mission: '+tm.dream,W-2*P-230,2).forEach(function(l){y+=40;x.fillText(l,P,y)});
- var sx=W-P-200,sy=P+(tall?90:10)+10;var sg=x.createLinearGradient(sx,sy,sx+200,sy+150);sg.addColorStop(0,'#0071e3');sg.addColorStop(1,'#bf5af2');x.fillStyle=sg;x.beginPath();x.roundRect(sx,sy,200,150,32);x.fill();
- x.fillStyle='#fff';x.textAlign='center';x.font='800 72px '+F;x.fillText(tm.score,sx+100,sy+82);x.font='700 20px '+F;x.fillText('POWER SCORE',sx+100,sy+118);x.textAlign='left';
- y=Math.max(y,sy+150)+(tall?50:30);var foot=tall?200:150,avail=H-y-foot,gap=tall?22:14,ch=(avail-gap*4)/5;
- tm.bots.forEach(function(b,i){var cy=y+i*(ch+gap);x.fillStyle='#ffffffdd';x.beginPath();x.roundRect(P,cy,W-2*P,ch,28);x.fill();
-  var av=Math.min(ch-36,tall?110:90),ax=P+22,ay=cy+(ch-av)/2;x.fillStyle='#f0f0f5';x.beginPath();x.roundRect(ax,ay,av,av,24);x.fill();x.textAlign='center';x.font=Math.round(av*.62)+'px '+F;x.fillText(b.emoji,ax+av/2,ay+av*.73);x.textAlign='left';
-  var tx=ax+av+24,tw=W-P-22-tx,fs=tall?27:23;x.font='500 '+fs+'px '+F;var maxL=Math.max(1,Math.floor((ch-(tall?52:44)-18)/(fs*1.35))),rl=wrap(x,b.rep,tw,maxL),blk=(tall?34:30)+rl.length*fs*1.35+4,ty=cy+Math.max(tall?52:44,(ch-blk)/2+(tall?30:26));x.fillStyle='#1d1d1f';x.font='800 '+(tall?34:30)+'px '+F;x.fillText(b.name,tx,ty);var nw=x.measureText(b.name+'  ').width;x.fillStyle='#0071e3';x.font='700 '+(tall?26:23)+'px '+F;x.fillText(wrap(x,b.role,tw-nw,1)[0],tx+nw,ty);
-  x.fillStyle='#3a3a3c';x.font='500 '+fs+'px '+F;rl.forEach(function(l,j){x.fillText(l,tx,ty+fs*1.35*(j+1)+4)})});
- x.fillStyle='#1d1d1f';x.font='800 34px '+F;x.fillText('“'+tm.label+'”',P,H-P-(tall?70:50));
- x.fillStyle='#6e6e73';x.font='700 28px '+F;x.fillText('🤖 Hire yours: mxhoaib.github.io/bot-team',P,H-P+(tall?-20:10))}
-function draw(){if(!team)return;drawPoster($('#cv'),1080,size==='45'?1350:1920,team)}
-function blob(){return new Promise(function(r){$('#cv').toBlob(r,'image/png')})}
-function fname(){return 'bot-team-'+(size==='45'?'1080x1350':'1080x1920')+'.png'}
-function toast(m){$('#toast').textContent=m}
-$('#dl').onclick=async function(){var b=await blob(),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=fname();document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},2000);toast('Poster downloaded ✓')};
-$('#native').onclick=async function(){try{var b=await blob(),f=new File([b],fname(),{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],text:shareText(),url:myLink()});return}if(navigator.share){await navigator.share({text:shareText(),url:myLink()});return}}catch(e){if(e&&e.name==='AbortError')return}var ok=await Viral.clip(shareText()+' '+myLink());toast(ok?'Sharing not supported here, link copied instead ✓':'Copy failed')};
-$('#copy').onclick=async function(){toast(await Viral.clip(myLink())?'Link copied ✓':'Copy failed')};
-$('#reroll').onclick=function(){roll++;run(false)};
-$('#fcopy').onclick=async function(){var n=Viral.clean($('#fname').value,24),d=Viral.clean($('#fdream').value,60);if(!n||!d){toast('Add your friend\u2019s name and dream first');return}toast(await Viral.clip(link(n,d,mode))?'Friend link copied ✓ Send it to '+n+'!':'Copy failed')};
-$('#f').onsubmit=function(e){e.preventDefault();roll=0;run(true)};
-function fromHash(){var m=location.hash.match(/^#t=([A-Za-z0-9_-]{1,800})$/);if(!m)return false;var o=Viral.dec(m[1]);if(!o||typeof o!=='object')return false;var n=Viral.clean(o.n,24),d=Viral.clean(o.d,60);if(!n||!d)return false;$('#name').value=n;$('#dream').value=d;roll=0;setMode(o.m);run(false);Viral.count('open-link','Opened team link');return true}
+var F='Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif';
+function wrapT(x,t,max,n){var w=String(t).split(/\s+/),out=[],l='';for(var i=0;i<w.length;i++){var tt=l?l+' '+w[i]:w[i];if(x.measureText(tt).width>max&&l){out.push(l);l=w[i]}else l=tt}if(l)out.push(l);if(out.length>n){out=out.slice(0,n);out[n-1]=out[n-1].replace(/\s*\S*$/,'')+'…'}return out}
+function fitF(x,t,w,max,s,min){do{x.font=w+' '+s+'px '+F;if(x.measureText(t).width<=max)break;s-=2}while(s>min);return s}
+function rr(x,a,b,w,h,r){x.beginPath();if(x.roundRect)x.roundRect(a,b,w,h,r);else x.rect(a,b,w,h)}
+function drawPoster(cv,W,H,b,k){k=k||1;cv.width=W*k;cv.height=H*k;var x=cv.getContext('2d');x.scale(k,k);var tall=H/W>1.6,P=80;
+ x.fillStyle='#07070b';x.fillRect(0,0,W,H);
+ [[W*.85,-40,W*.9,b.color[0]+'66'],[0,H*.95,W*.9,b.color[1]+'44'],[W*.5,H*.42,W*.6,'#7c8cff18']].forEach(function(o){var g=x.createRadialGradient(o[0],o[1],0,o[0],o[1],o[2]);g.addColorStop(0,o[3]);g.addColorStop(1,'#07070b00');x.fillStyle=g;x.fillRect(0,0,W,H)});
+ x.strokeStyle='#ffffff08';x.lineWidth=1;for(var gx=0;gx<W;gx+=60){x.beginPath();x.moveTo(gx,0);x.lineTo(gx,H*.5);x.stroke()}for(var gy=0;gy<H*.5;gy+=60){x.beginPath();x.moveTo(0,gy);x.lineTo(W,gy);x.stroke()}
+ var y=P+(tall?60:0);
+ var mg=x.createLinearGradient(P,y,P+52,y+52);mg.addColorStop(0,'#7c8cff');mg.addColorStop(1,'#c084fc');x.fillStyle=mg;rr(x,P,y,52,52,14);x.fill();x.fillStyle='#07070b';x.font='800 20px '+F;x.textAlign='center';x.fillText('GH',P+26,y+34);x.textAlign='left';
+ x.fillStyle='#f4f4f7';x.font='700 30px '+F;x.fillText('GrokHire',P+70,y+36);x.fillStyle='#9a9aab';x.font='500 24px '+F;x.textAlign='right';x.fillText('NOW HIRING',W-P,y+35);x.textAlign='left';
+ y+=tall?190:140;
+ var av=tall?200:170,ag=x.createLinearGradient(P,y,P+av,y+av);ag.addColorStop(0,b.color[0]);ag.addColorStop(1,b.color[1]);x.shadowColor=b.color[0]+'99';x.shadowBlur=60;x.fillStyle=ag;rr(x,P,y,av,av,av*.3);x.fill();x.shadowBlur=0;
+ x.fillStyle='#07070b';x.font='700 '+Math.round(av*.5)+'px '+F;x.textAlign='center';x.fillText(b.name.charAt(0).toUpperCase(),P+av/2,y+av*.67);x.textAlign='left';
+ y+=av+(tall?90:70);
+ x.fillStyle='#7c8cff';x.font='600 26px '+F;x.fillText('MEET YOUR NEW GROK BOT',P,y);y+=20;
+ var ns=fitF(x,b.name,'700',W-2*P,tall?120:104,48);x.fillStyle='#ffffff';x.fillText(b.name,P,y+ns*.95);y+=ns*1.12;
+ x.fillStyle='#c9c9d6';x.font='500 '+(tall?40:36)+'px '+F;wrapT(x,b.job,W-2*P,2).forEach(function(l){y+=tall?54:48;x.fillText(l,P,y)});
+ y+=40;x.font='600 24px '+F;var pt=b.persLabel.toUpperCase(),pw=x.measureText(pt).width+40;x.fillStyle='#5eead41a';rr(x,P,y,pw,48,24);x.fill();x.strokeStyle='#5eead455';x.stroke();x.fillStyle='#5eead4';x.fillText(pt,P+20,y+32);y+=48+(tall?60:44);
+ var foot=tall?230:170,rs=b.rules.length?b.rules:[b.persText],fs=tall?30:27,lh=fs*1.4;
+ for(var i=0;i<rs.length;i++){x.font='500 '+fs+'px '+F;var ls=wrapT(x,rs[i],W-2*P-90,2),ch=ls.length*lh+36;if(y+ch>H-foot)break;x.fillStyle='#ffffff0a';rr(x,P,y,W-2*P,ch,22);x.fill();x.strokeStyle='#ffffff14';x.stroke();
+  x.fillStyle=b.color[0];x.beginPath();x.arc(P+34,y+18+lh/2,6,0,7);x.fill();x.fillStyle='#e4e4ee';ls.forEach(function(l,j){x.fillText(l,P+62,y+18+lh*(j+1)-lh*.3)});y+=ch+14}
+ var fy=H-P-(tall?60:20);x.strokeStyle='#ffffff1a';x.beginPath();x.moveTo(P,fy-70);x.lineTo(W-P,fy-70);x.stroke();
+ x.fillStyle='#ffffff';x.font='700 30px '+F;x.fillText('Build yours free',P,fy-18);x.fillStyle='#9a9aab';x.font='500 26px '+F;x.fillText(SITE,P,fy+20);
+ x.font='500 18px '+F;x.textAlign='right';x.fillStyle='#6b6b7b';x.fillText('Fan-made. Not affiliated with',W-P,fy-18);x.fillText('Grok Bot or xAI.',W-P,fy+10);x.textAlign='left'}
+function dims(){return size==='45'?[1080,1350]:[1080,1920]}
+function draw(){if(!bot)return;var d=dims();drawPoster($('#cv'),d[0],d[1],bot,1)}
+document.querySelectorAll('[data-size]').forEach(function(b){b.onclick=function(){size=b.getAttribute('data-size');document.querySelectorAll('[data-size]').forEach(function(x){x.classList.toggle('on',x===b)});draw()}});
+function hdBlob(){var d=dims(),c=document.createElement('canvas');drawPoster(c,d[0],d[1],bot,2);return new Promise(function(r){c.toBlob(r,'image/png')})}
+function pname(){var d=dims();return 'grokhire-'+slug(bot.name)+'-'+d[0]*2+'x'+d[1]*2+'.png'}
+$('#dl').onclick=async function(){save(await hdBlob(),pname());toast('HD poster downloaded. Free, as promised.');track('download-hd')};
+$('#native').onclick=async function(){try{var bl=await hdBlob(),f=new File([bl],pname(),{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],text:shareText(),url:link()});return}if(navigator.share){await navigator.share({text:shareText(),url:link()});return}}catch(e){if(e&&e.name==='AbortError')return}toast(await clip(shareText()+' '+link())?'Sharing not supported here, so the link was copied.':'Copy failed')};
+$('#copyLink').onclick=async function(){toast(await clip(link())?'Link copied. It rebuilds this bot for anyone who opens it.':'Copy failed')};
+
+/* ---------- open from a shared link ---------- */
+function fromHash(){var m=location.hash.match(/^#b=([A-Za-z0-9_-]{1,3000})$/);if(!m)return;var o=dec(m[1]);if(!o||typeof o!=='object')return;var n=clean(o.n,32),j=clean(o.j,90);if(!n||!j)return;$('#name').value=n;$('#job').value=j;$('#ins').value=clean(o.i,1200);$('#safe').checked=o.s!==0;setPers(o.p);preview();build(false,true);track('open-link')}
 window.addEventListener('hashchange',fromHash);fromHash();
-window.BotTeam={build:build,drawPoster:drawPoster};
+
+/* ---------- reveal on scroll ---------- */
+if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});document.querySelectorAll('.feat,.sechead').forEach(function(el){el.classList.add('reveal');io.observe(el)})}
+window.GrokHire={make:make,json:json,drawPoster:drawPoster};
 })();

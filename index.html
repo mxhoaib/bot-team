@@ -1,43 +1,72 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Hire Your Bot Team: 5 AI bots for your dream</title><meta name="description" content="Type your name and your dream. We hire you a team of 5 hilarious AI bots, each with a job title, a personality and a first report. Make a poster and share it.">
-<meta name="theme-color" content="#f5f5f7">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+<title>GrokHire · Build and hire Grok Bots</title>
+<meta name="description" content="GrokHire is a free tool to design a Grok Bot: give it a name, a job, a personality and instructions, then copy a ready-to-paste setup or download it as JSON. Free, no sign-up.">
+<meta name="theme-color" content="#07070b">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%237c8cff'/><stop offset='1' stop-color='%23c084fc'/></linearGradient></defs><rect width='64' height='64' rx='16' fill='%2307070b'/><rect x='6' y='6' width='52' height='52' rx='13' fill='url(%23g)'/><text x='32' y='42' font-family='Arial' font-weight='800' font-size='26' text-anchor='middle' fill='%2307070b'>GH</text></svg>">
 <link rel="canonical" href="https://mxhoaib.github.io/bot-team/">
-<meta property="og:type" content="website"><meta property="og:site_name" content="Hire Your Bot Team">
-<meta property="og:title" content="Hire Your Bot Team 🤖 5 AI bots for your dream"><meta property="og:description" content="Type your dream. Meet the 5 ridiculous bots who just got hired to make it happen. Make a poster and share it.">
+<meta property="og:type" content="website"><meta property="og:site_name" content="GrokHire">
+<meta property="og:title" content="GrokHire · Build and hire Grok Bots"><meta property="og:description" content="Design a Grok Bot in a minute: name, job, personality, instructions. Copy the setup, paste it into the Grok Bot app. Free.">
 <meta property="og:url" content="https://mxhoaib.github.io/bot-team/"><meta property="og:image" content="https://mxhoaib.github.io/bot-team/og-image.png">
-<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Hire Your Bot Team: five funny AI bots with job titles">
-<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Hire Your Bot Team 🤖 5 AI bots for your dream">
-<meta name="twitter:description" content="Type your dream. Meet the 5 ridiculous bots who just got hired to make it happen."><meta name="twitter:image" content="https://mxhoaib.github.io/bot-team/og-image.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="GrokHire: Build and hire Grok Bots">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="GrokHire · Build and hire Grok Bots">
+<meta name="twitter:description" content="Design a Grok Bot in a minute. Copy the setup, paste it into the Grok Bot app. Free."><meta name="twitter:image" content="https://mxhoaib.github.io/bot-team/og-image.png">
 <link rel="stylesheet" href="style.css"></head><body>
-<nav><div class="wrap"><b>🤖 Hire Your Bot Team</b><span class="links"><a href="#hire">Hire</a><a href="#hd">HD pack</a></span></div></nav>
-<header class="hero wrap"><p class="eyebrow">Now hiring · zero salaries · infinite enthusiasm</p><h1>Your dream deserves<br><span class="grad">a bot team.</span></h1>
-<p class="sub">Tell us your name and your dream. We'll instantly hire five extremely confident AI bots to make it happen. Results not guaranteed. Meetings guaranteed.</p></header>
-<section class="band" id="hire"><div class="wrap narrow">
+<div class="bg" aria-hidden="true"><i class="o1"></i><i class="o2"></i><i class="grid"></i></div>
+<nav><div class="wrap"><a class="brand" href="#top"><span class="mark" aria-hidden="true">GH</span>GrokHire</a><span class="links"><a href="#build">Build</a><a href="#how">How import works</a><a class="nbtn" href="#build">Build a bot</a></span></div></nav>
+<header class="hero wrap" id="top">
+<a class="live" id="live" aria-live="polite" href="#build" hidden><span class="dot"></span><b id="liveN">0</b><span id="liveL">bots built by people</span></a>
+<h1>Build and hire<br><span class="grad">Grok Bots.</span></h1>
+<p class="sub">Give your bot a name, a job, a personality and its rules. GrokHire turns it into a clean, ready-to-paste setup for the Grok Bot app. Free, no sign-up, runs in your browser.</p>
+<div class="cta"><a class="btn" href="#build">Start building</a><a class="btn ghost" href="#how">How import works</a></div>
+<ul class="ticks"><li>100% free</li><li>No account</li><li>Copy or download .json</li><li>Free HD poster</li></ul>
+</header>
+
+<section class="wrap" id="build">
+<div class="sechead"><p class="eyebrow">Builder</p><h2>Design your bot</h2><p class="muted">Start from a template or write your own. The preview updates as you type.</p></div>
+<div class="chips" id="tpls" aria-label="Templates"></div>
+<div class="builder">
 <form id="f" class="card form" autocomplete="off">
-<label>Your name<input id="name" maxlength="24" placeholder="e.g. Sam" required></label>
-<label>Your dream or job<input id="dream" maxlength="60" placeholder="e.g. open a bakery" required></label>
-<div class="chips" id="ideas" aria-label="Example dreams"></div>
-<div class="row between"><div class="seg" role="group" aria-label="Tone"><button type="button" class="on" data-mode="mild" data-ev="mode-mild" aria-pressed="true">😇 Mild</button><button type="button" data-mode="spicy" data-ev="mode-spicy" aria-pressed="false">🌶️ Spicy</button></div>
-<button class="btn" type="submit" data-ev="hire">Hire my team →</button></div>
+<label>Bot name<input id="name" maxlength="32" placeholder="e.g. Scout" required></label>
+<label>Job <span class="hint">One clear job works best</span><input id="job" maxlength="90" placeholder="e.g. Research competitors for my bakery" required></label>
+<fieldset><legend>Personality</legend><div class="seg" id="pers" role="radiogroup" aria-label="Personality"></div></fieldset>
+<label>Instructions <span class="hint">Optional · one rule per line</span><textarea id="ins" rows="5" maxlength="1200" placeholder="e.g. Check three local competitors every Monday&#10;Keep a link for every price you find&#10;Summaries under 150 words"></textarea></label>
+<label class="check"><input type="checkbox" id="safe" checked><span>Add safe approval rules (ask before sending, posting, buying or deleting)</span></label>
+<button class="btn big" type="submit">Build my Grok Bot <span aria-hidden="true">→</span></button>
 </form>
-<div id="out" hidden>
-<div class="teamhead"><div><p class="eyebrow" id="kick"></p><h2 id="title"></h2></div><div class="score" id="score"><b id="scoreN">0</b><span id="scoreL"></span></div></div>
-<div class="bots" id="bots"></div>
-<div class="card share">
-<h3>Make the poster</h3>
-<div class="row"><div class="seg" role="group" aria-label="Poster size"><button type="button" class="on" data-size="45" data-ev="size-4x5">4:5 feed</button><button type="button" data-size="916" data-ev="size-9x16">9:16 story</button></div></div>
-<canvas id="cv" width="1080" height="1350" aria-label="Poster preview"></canvas>
-<div class="row"><button class="btn" type="button" id="dl" data-ev="download-poster">⬇ Download PNG</button><button class="btn ghost" type="button" id="native" data-ev="share-native">Share…</button><button class="btn ghost" type="button" id="copy" data-ev="copy-link">🔗 Copy link</button></div>
-<div class="row"><a class="pill" id="wa" target="_blank" rel="noopener" data-ev="share-whatsapp">WhatsApp</a><a class="pill" id="xx" target="_blank" rel="noopener" data-ev="share-x">X</a><a class="pill" id="li" target="_blank" rel="noopener" data-ev="share-linkedin">LinkedIn</a><button class="pill" type="button" id="reroll" data-ev="reroll">🎲 Re-hire (new dream wording)</button></div>
-<p class="small" id="toast" role="status"></p>
+<aside class="card preview" aria-live="polite"><p class="eyebrow">Live preview</p>
+<div class="pv"><div class="av" id="pvAv">S</div><div><h3 id="pvName">Your bot</h3><p class="role" id="pvJob">Its job shows here</p></div></div>
+<p class="tag" id="pvPers"></p><ul class="rules" id="pvRules"></ul></aside>
 </div>
-<div class="card friend"><h3>Hire a friend's team 🎁</h3><p class="small">Type a friend's name and dream. Send them the link and they'll meet their bots.</p>
-<div class="row"><input id="fname" maxlength="24" placeholder="Friend's name" aria-label="Friend's name"><input id="fdream" maxlength="60" placeholder="Their dream" aria-label="Friend's dream"><button class="btn ghost" type="button" id="fcopy" data-ev="friend-link">Copy their link</button></div></div>
-</div></div></section>
-<section class="band dark" id="hd"><div class="wrap" style="text-align:center"><h2>Frame-worthy? Get the HD poster pack.</h2><p class="sub">Support the bots' union. Optional, via PayPal.</p><div class="price">$5</div><a class="btn" href="pay/?item=hd" data-ev="pay-hd">Get the HD poster pack</a></div></section>
-<footer>© 2026 Hire Your Bot Team · All bots are fictional and run entirely in your browser. Nothing you type leaves your device.</footer>
-<script src="viral.js" defer></script><script src="app.js" defer></script>
+</section>
+
+<section class="wrap" id="out" hidden>
+<div class="sechead"><p class="eyebrow">Ready to hire</p><h2 id="outTitle">Your bot is ready</h2><p class="muted">Copy the setup, open the Grok Bot app, create a bot with this name and paste it as the first message.</p></div>
+<div class="res">
+<div class="card setup"><div class="bar"><span>bot-setup.txt</span><span class="dots"><i></i><i></i><i></i></span></div><pre id="setup"></pre></div>
+<div class="card import"><h3>Import into Grok Bot</h3>
+<div class="stack"><button class="btn" type="button" id="copySetup">Copy bot setup</button><button class="btn ghost" type="button" id="dlJson">Download .json</button><a class="btn ghost" href="https://x.ai/bot" target="_blank" rel="noopener">Open Grok Bot ↗</a></div>
+<ol class="steps"><li>Open the Grok Bot app and choose <b>New Bot</b> (the + button, or <kbd>Ctrl/⌘</kbd>+<kbd>N</kbd>).</li><li>Name it <b id="stepName">your bot</b> and choose <b>Create</b>.</li><li>Paste the setup as your first message. The bot saves the rules.</li><li>To share it, open the bot's details and choose <b>Share</b>, then <b>Create a copy</b>, then <b>Publish</b>.</li></ol>
+<p class="small">"Open Grok Bot" goes to the official Grok Bot page (x.ai/bot), where you can download the app. There is no public link that creates a bot for you, so you paste the setup yourself.</p>
+<p class="toast" id="toast" role="status"></p></div>
+</div>
+<div class="card poster"><div class="phead"><div><h3>Share the poster</h3><p class="small">HD download is free.</p></div><div class="seg" role="group" aria-label="Poster size"><button type="button" class="on" data-size="45">4:5 feed</button><button type="button" data-size="916">9:16 story</button></div></div>
+<canvas id="cv" width="1080" height="1350" aria-label="Poster preview"></canvas>
+<div class="row"><button class="btn" type="button" id="dl">Download HD poster (free)</button><button class="btn ghost" type="button" id="native">Share…</button><button class="btn ghost" type="button" id="copyLink">Copy link</button><a class="btn ghost" id="xx" target="_blank" rel="noopener">Post on X</a><a class="btn ghost" id="li" target="_blank" rel="noopener">LinkedIn</a></div></div>
+</section>
+
+<section class="wrap" id="how">
+<div class="sechead"><p class="eyebrow">How import works</p><h2>Honest and simple</h2></div>
+<div class="grid3">
+<div class="card feat"><span class="n">01</span><h3>Build here</h3><p>Pick a name, a job, a personality and rules. Everything stays in your browser.</p></div>
+<div class="card feat"><span class="n">02</span><h3>Paste in Grok Bot</h3><p>Create a new bot in the Grok Bot app and paste the setup as the first message. That is the official way to give a bot its job.</p></div>
+<div class="card feat"><span class="n">03</span><h3>Share as a template</h3><p>Shareable "Add to Grok Bot" links are made inside the app (Share, Create a copy, Publish). This site can't make them for you.</p></div>
+</div>
+</section>
+
+<footer class="wrap"><div class="fbrand"><span class="mark" aria-hidden="true">GH</span>GrokHire · Build and hire Grok Bots</div>
+<p>GrokHire is an independent fan-made tool, not affiliated with Grok Bot or xAI.</p>
+<p class="small">Free. What you type stays in your browser. We only send a +1 to a public counter when you build a bot, plus anonymous page-view stats. <a href="https://docs.x.ai/grok-bot/bots" target="_blank" rel="noopener">Grok Bot docs ↗</a></p></footer>
+<script src="app.js" defer></script>
 <script data-goatcounter="https://d3dddsites.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
-<script src="contact.js" data-subject="My bot team needs a human" data-emoji="🤖" data-line="My bots handle the busywork. For the human stuff, I answer personally (no bot, pinky promise)." defer></script>
+<script src="contact.js" data-subject="GrokHire: hello from a bot builder" data-emoji="👋" data-line="Questions or ideas for GrokHire? A real human reads every email." defer></script>
 </body></html>
