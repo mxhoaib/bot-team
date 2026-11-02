@@ -1,4 +1,5 @@
-{"categories":[
+{"contact":{"whatsapp_username":"mxhoaib","whatsapp_number":"","_note":"No official wa.me link exists for usernames yet, so the username shows as text. Set whatsapp_number (international, digits only, no + or leading 0) and run python3 tools/build.py to make it a wa.me link."},
+"categories":[
  {"id":"engineering","label":"EV, robotics & energy","blurb":"Starter bots for EV, robotics and energy engineers: autonomy data, battery cells, factory lines, firmware, humanoid robots and grid storage."},
  {"id":"productivity","label":"Productivity","blurb":"Inbox, meetings and research busywork."},
  {"id":"career","label":"Career","blurb":"Job search and interview prep."},

@@ -107,3 +107,4 @@ details summary{cursor:pointer;font-size:13px;color:var(--a);list-style:none}det
 @media(max-width:900px){.builder,.res{grid-template-columns:1fr}.res .import{order:-1}pre{max-height:340px}.preview{position:relative;top:0}.grid3{grid-template-columns:1fr}}
 @media(max-width:560px){.cats{justify-content:flex-start}.search{max-width:none}.grid{grid-template-columns:1fr}.cta.left .btn{flex:1 1 100%}.links a:not(.nbtn){display:none}.hero{padding-top:56px}.card{padding:18px}section{padding:40px 0}.cta .btn{flex:1 1 100%}.row .btn{flex:1 1 calc(50% - 10px)}.row #dl{flex-basis:100%}}
 @media(prefers-reduced-motion:reduce){*,*:before{animation:none!important;transition:none!important}.tcard:hover,.fcard:hover{transform:none}.reveal{opacity:1;transform:none}}
+.wa-contact{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}.wa-ico{width:1em;height:1em;flex:none;color:#25d366}
